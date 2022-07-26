@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
+    public function getAllContacts ()
+    {
+        return 'Get All contacts ';
+    }
+
     public function getContactById ($id)
     {
         return 'Contact by id ' . $id;
