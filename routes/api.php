@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    return 'Bienvenido a mi App de contactos.';
+});
+
 // Contacts
 Route::get('/contacts', function() {
     return "GET contacts";
