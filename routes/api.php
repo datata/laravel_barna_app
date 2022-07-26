@@ -19,22 +19,28 @@ Route::get('/', function () {
 });
 
 // Contacts
-Route::get('/contacts', function() {
-    return "GET contacts";
-});
+Route::group(
+    [],
+    function () {
 
-Route::get('/contacts/{id}', function($id) {
-    return "GET contact by id: " . $id;
-});
+        Route::get('/contacts', function () {
+            return "GET contacts";
+        });
 
-Route::put('/contacts/{id}', function($id) {
-    return "Update contact by id: " . $id;
-});
+        Route::get('/contacts/{id}', function ($id) {
+            return "GET contact by id: " . $id;
+        });
 
-Route::post('/contacts', function() {
-    return "Create contact";
-});
+        Route::put('/contacts/{id}', function ($id) {
+            return "Update contact by id: " . $id;
+        });
 
-Route::delete('/contacts/{id}', function($id) {
-    return "Delete contact by id: " . $id;
-});
+        Route::post('/contacts', function () {
+            return "Create contact";
+        });
+
+        Route::delete('/contacts/{id}', function ($id) {
+            return "Delete contact by id: " . $id;
+        });
+    }
+);
