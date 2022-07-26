@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
     public function getAllContacts()
     {
         try {
+            Log::info('Getting all contacts');
             // QUERY BUILDER
             // $contacts = DB::table('contacts')->select('name', 'email')->get()->toArray();
 
@@ -28,10 +30,12 @@ class ContactController extends Controller
                 200
             );
         } catch (\Exception $exception) {
+            Log::error('Error getting contacts: '. $exception->getMessage());
+
             return response()->json(
                 [
                     'success' => false,
-                    'message' => "Error getting contacts: ".$exception->getMessage()
+                    'message' => "Error getting contacts"
                 ],
                 500
             );
