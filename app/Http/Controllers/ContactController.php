@@ -3,30 +3,50 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
-    public function getAllContacts ()
+    public function getAllContacts()
     {
-        return 'Get All contacts ';
+        try {
+            $users = DB::table('contacts')->select('name', 'email')->get()->toArray();
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => "Get all contacts retrieved.",
+                    'data' => $users
+                ],
+                200
+            );
+        } catch (\Exception $exception) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => "Error getting contacts"
+                ],
+                500
+            );
+        }
     }
 
-    public function getContactById ($id)
+    public function getContactById($id)
     {
         return 'Contact by id ' . $id;
     }
 
-    public function createContact ()
+    public function createContact()
     {
         return "Create contact by id";
     }
 
-    public function updateContact ($id)
+    public function updateContact($id)
     {
         return "Update contact by id" . $id;
     }
 
-    public function deleteContact ($id)
+    public function deleteContact($id)
     {
         return "Delete contacty by id" . $id;
     }
