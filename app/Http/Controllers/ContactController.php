@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,13 +11,19 @@ class ContactController extends Controller
     public function getAllContacts()
     {
         try {
-            $users = DB::table('contacts')->select('name', 'email')->get()->toArray();
+            // QUERY BUILDER
+            // $contacts = DB::table('contacts')->select('name', 'email')->get()->toArray();
+
+            // MODEL
+            $contacts = Contact::query()
+                ->get()
+                ->toArray();    
 
             return response()->json(
                 [
                     'success' => true,
                     'message' => "Get all contacts retrieved.",
-                    'data' => $users
+                    'data' => $contacts
                 ],
                 200
             );
@@ -24,7 +31,7 @@ class ContactController extends Controller
             return response()->json(
                 [
                     'success' => false,
-                    'message' => "Error getting contacts"
+                    'message' => "Error getting contacts: ".$exception->getMessage()
                 ],
                 500
             );
