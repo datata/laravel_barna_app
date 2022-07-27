@@ -149,9 +149,72 @@ class ContactController extends Controller
         }
     }
 
-    public function updateContact($id)
+    public function updateContact(Request $request, $id)
     {
-        return "Update contact by id" . $id;
+        try {
+            $validator = Validator::make($request->all(), [
+                'name' => 'string',
+                'email' => 'email',
+                'phone_number' => 'string'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(
+                    [
+                        "success" => false,
+                        "message" => $validator->errors()
+                    ],
+                    400
+                );
+            };    
+
+            $contact = Contact::query()->findOrFail($id);
+
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $phoneNumber = $request->input('phone_number');
+
+
+            if(isset($name)) {
+                $contact->name = $name;
+            }
+
+            if(isset($email)) {
+                $contact->email = $request->input('email');
+            }
+
+            if (isset($phoneNumber)) {
+                $contact->phone_number = $request->input('phone_number');
+            }
+
+            $contact->save();
+
+            // Contact::where('id','=' ,$id)->update(
+            //     [
+            //         'name' => $request->input("name"),
+            //         'email' => $request->input("email"),
+            //         'phone_number' => $request->input("phone_number")
+            //     ]
+            // );
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "messagge" => "Contact updated"
+                ],
+                200
+            );
+        } catch (\Exception $exception) {
+            Log::error('Error updating contact: ' . $exception->getMessage());
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "messagge" => "Error updateing contact"
+                ],
+                500
+            );
+        }
     }
 
     public function deleteContact($id)
