@@ -24,7 +24,7 @@ Route::group(
     [],
     function () {
 
-        Route::get('/contacts', [ContactController::class, 'getAllContacts']);
+        Route::get('/contacts', [ContactController::class, 'getAllContacts'])->middleware('test');
 
         Route::get('/contacts/{id}', [ContactController::class, 'getContactById']);
 
