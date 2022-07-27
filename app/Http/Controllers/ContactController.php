@@ -100,7 +100,7 @@ class ContactController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'email' => 'required|email'
-                
+
             ]);
 
             if ($validator->fails()) {
@@ -156,6 +156,36 @@ class ContactController extends Controller
 
     public function deleteContact($id)
     {
-        return "Delete contacty by id" . $id;
+        try {
+            Contact::query()->find($id)->delete();
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "messagge" => "Contact created"
+                ],
+                200
+            );
+        } catch (\Exception $exception) {
+            Log::error('Error deleting Exception contact: '.$exception->getMessage());
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "messagge" => "Error deleting contact"
+                ],
+                500
+            );
+        } catch (\Throwable $throwable) {
+            Log::error('Error deleting Throwable contact: '.$throwable->getMessage());
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "messagge" => "Error deleting contact"
+                ],
+                500
+            );
+        }
     }
 }
