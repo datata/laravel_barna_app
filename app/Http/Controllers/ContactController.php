@@ -30,7 +30,7 @@ class ContactController extends Controller
                 200
             );
         } catch (\Exception $exception) {
-            Log::error('Error getting contacts: '. $exception->getMessage());
+            Log::error('Error getting contacts: ' . $exception->getMessage());
 
             return response()->json(
                 [
@@ -50,7 +50,7 @@ class ContactController extends Controller
 
             // $contact = Contact::query()->where('id', '<', $id)->first();
 
-            $contact = Contact::query()->where('id', $id)->firstOrFail();            
+            $contact = Contact::query()->where('id', $id)->firstOrFail();
 
             // if (!$contact) {
             //     return response()->json(
@@ -71,10 +71,9 @@ class ContactController extends Controller
                 200
             );
         } catch (\Exception $exception) {
-            Log::error('Error getting task: '.$exception->getMessage());
+            Log::error('Error getting task: ' . $exception->getMessage());
 
-            if($exception->getMessage() === "No query results for model [App\Models\Contact].")
-            {
+            if ($exception->getMessage() === "No query results for model [App\Models\Contact].") {
                 return response()->json(
                     [
                         'success' => true,
@@ -83,7 +82,7 @@ class ContactController extends Controller
                     404
                 );
             }
-            
+
             return response()->json(
                 [
                     'success' => false,
@@ -94,9 +93,31 @@ class ContactController extends Controller
         }
     }
 
-    public function createContact()
+    public function createContact(Request $request)
     {
-        return "Create contact by id";
+        $name = $request->input('name');
+        $email = $request->input('email');
+        // $phoneNumber = $request->input('phone_number');
+        $birthday = $request->input('birthday');
+        $userId = $request->input('user_id');
+
+        $newContact = new Contact();
+
+        $newContact->name = $name;
+        $newContact->email = $email;
+        $newContact->phone_number = $request->input('phone_number');
+        $newContact->birthday = $birthday;
+        $newContact->user_id = $userId;
+
+        $newContact->save();
+
+        return response()->json(
+            [
+                "success" => true,
+                "messagge" => "Contact created"
+            ],
+            200
+        );
     }
 
     public function updateContact($id)
