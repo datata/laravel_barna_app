@@ -95,29 +95,41 @@ class ContactController extends Controller
 
     public function createContact(Request $request)
     {
-        $name = $request->input('name');
-        $email = $request->input('email');
-        // $phoneNumber = $request->input('phone_number');
-        $birthday = $request->input('birthday');
-        $userId = $request->input('user_id');
+        try {
+            $name = $request->input('name');
+            $email = $request->input('email');
+            // $phoneNumber = $request->input('phone_number');
+            $birthday = $request->input('birthday');
+            $userId = $request->input('user_id');
 
-        $newContact = new Contact();
+            $newContact = new Contact();
 
-        $newContact->name = $name;
-        $newContact->email = $email;
-        $newContact->phone_number = $request->input('phone_number');
-        $newContact->birthday = $birthday;
-        $newContact->user_id = $userId;
+            $newContact->name = $name;
+            $newContact->email = $email;
+            $newContact->phone_number = $request->input('phone_number');
+            $newContact->birthday = $birthday;
+            $newContact->user_id = $userId;
 
-        $newContact->save();
+            $newContact->save();
 
-        return response()->json(
-            [
-                "success" => true,
-                "messagge" => "Contact created"
-            ],
-            200
-        );
+            return response()->json(
+                [
+                    "success" => true,
+                    "messagge" => "Contact created"
+                ],
+                200
+            );
+        } catch (\Exception $exception) {
+            Log::error('Error creating user: ' . $exception->getMessage());
+
+            return response()->json(
+                [
+                    "success" => true,
+                    "messagge" => "Error creating contact"
+                ],
+                500
+            );
+        }
     }
 
     public function updateContact($id)
