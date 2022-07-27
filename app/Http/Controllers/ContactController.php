@@ -19,7 +19,7 @@ class ContactController extends Controller
             // MODEL
             $contacts = Contact::query()
                 ->get()
-                ->toArray();    
+                ->toArray();
 
             return response()->json(
                 [
@@ -44,7 +44,54 @@ class ContactController extends Controller
 
     public function getContactById($id)
     {
-        return 'Contact by id ' . $id;
+        try {
+            Log::info('Getting task by id');
+            // $contact = Contact::query()->find($id);
+
+            // $contact = Contact::query()->where('id', '<', $id)->first();
+
+            $contact = Contact::query()->where('id', $id)->firstOrFail();            
+
+            // if (!$contact) {
+            //     return response()->json(
+            //         [
+            //             'success' => true,
+            //             'message' => "Contact not found",
+            //         ],
+            //         404
+            //     );
+            // }
+
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => "Get contact by id.",
+                    'data' => $contact
+                ],
+                200
+            );
+        } catch (\Exception $exception) {
+            Log::error('Error getting task: '.$exception->getMessage());
+
+            if($exception->getMessage() === "No query results for model [App\Models\Contact].")
+            {
+                return response()->json(
+                    [
+                        'success' => true,
+                        'message' => "Contact not found",
+                    ],
+                    404
+                );
+            }
+            
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => "Error getting task"
+                ],
+                500
+            );
+        }
     }
 
     public function createContact()
