@@ -6,6 +6,7 @@ use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
 {
@@ -96,6 +97,22 @@ class ContactController extends Controller
     public function createContact(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'email' => 'required|email'
+                
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(
+                    [
+                        "success" => false,
+                        "message" => $validator->errors()
+                    ],
+                    400
+                );
+            };    
+
             $name = $request->input('name');
             $email = $request->input('email');
             // $phoneNumber = $request->input('phone_number');
